@@ -10,6 +10,7 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
 
   portainer:
     image: portainer/portainer:latest
@@ -20,7 +21,27 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
+    restart: unless-stopped
+
+  monitor:
+    image: michaelmiklis/rpi-monitor
+    container_name: monitor
+    ports:
+      - "8888:8888"
+    devices:
+      - /dev/vchiq
+      - /dev/vcsm
+    volumes:
+      - /opt/vc:/opt/vc:ro
+      - /boot:/boot:ro
+      - /sys:/dockerhost/sys:ro
+      - /etc:/dockerhost/etc:ro
+      - /proc:/dockerhost/proc:ro
+      - /usr/lib:/dockerhost/usr/lib:ro
+      - monitor_data:/var/lib/rpimonitor
+    restart: unless-stopped
 
 volumes:
   portainer_data:
+  monitor_data:
 
