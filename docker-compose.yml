@@ -4,7 +4,11 @@ services:
   traefik:
     image: traefik:v2.2
     container_name: traefik
-    command: --api.insecure=true --providers.docker
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
       - "8080:8080"
@@ -16,18 +20,22 @@ services:
     image: portainer/portainer:latest
     container_name: portainer
     ports:
-      - "8000:8000"
-      - "9000:9000"
+      - 9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.raspweb`)"
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
   monitor:
     image: michaelmiklis/rpi-monitor
     container_name: monitor
     ports:
-      - "8888:8888"
+      - 8888
     devices:
       - /dev/vchiq
       - /dev/vcsm
@@ -40,6 +48,11 @@ services:
       - /usr/lib:/dockerhost/usr/lib:ro
       - monitor_data:/var/lib/rpimonitor
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.monitor.rule=Host(`monitor.raspweb`)"
+      - "traefik.http.routers.monitor.entrypoints=web"
+      - "traefik.http.services.monitor.loadbalancer.server.port=8888"
 
 volumes:
   portainer_data:
