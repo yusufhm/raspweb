@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  dnsmasq:
+    image: anzevalher/dnsmasq:latest
+    container_name: dnsmasq
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes:
+      - ./dnsmasq.conf:/etc/dnsmasq.conf
+    cap_add:
+      - NET_ADMIN
+  
   traefik:
     image: traefik:v2.2
     container_name: traefik
