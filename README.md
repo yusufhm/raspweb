@@ -1,8 +1,15 @@
 # Raspweb configuration
-Contains the various configurations (common docker instances, etc..) for the Raspberry PI webserver.
+Contains the various configurations (common docker instances, etc..) for the Raspberry Pi webserver.
 
 ## dnsmasq
-The `/etc/resolvconf.conf` needs to be modified to allow `127.0.0.1` as a nameserver for `dnsmasq` to work; the following line needs to be uncommented:
+`resolvconf` is required on the Pi for the proper configuration of dnsmasq.
+
 ```
-name_servers=127.0.0.1
+sudo apt install -y resolvconf
+```
+
+Then configure it with the following:
+```
+echo 'nameserver 127.0.0.1' | sudo tee --append /etc/resolvconf/resolv.conf.d/head
+sudo resolvconf -u
 ```
