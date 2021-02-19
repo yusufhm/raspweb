@@ -1,4 +1,4 @@
-# Raspweb configuration
+# PiMedia configuration
 Contains the various configurations (common docker instances, etc..) for the Raspberry Pi webserver.
 
 ## dnsmasq

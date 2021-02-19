@@ -11,7 +11,7 @@ services:
       - ./dnsmasq.conf:/etc/dnsmasq.conf
     cap_add:
       - NET_ADMIN
-  
+
   traefik:
     image: traefik:v2.2
     container_name: traefik
@@ -38,7 +38,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.raspweb`)"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.pimedia`)"
       - "traefik.http.routers.portainer.entrypoints=web"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
@@ -61,7 +61,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.monitor.rule=Host(`monitor.raspweb`)"
+      - "traefik.http.routers.monitor.rule=Host(`monitor.pimedia`)"
       - "traefik.http.routers.monitor.entrypoints=web"
       - "traefik.http.services.monitor.loadbalancer.server.port=8888"
 
